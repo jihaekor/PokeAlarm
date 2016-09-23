@@ -7,6 +7,8 @@ import os
 import json
 import time
 import traceback
+import threading
+import Queue
 from datetime import datetime
 from threading import Thread
 
@@ -16,7 +18,7 @@ from utils import *
 
 class Alarm_Manager(Thread):
 
-	def __init__(self, queue):
+	def __init__(self):
 		#Intialize as Thread
 		super(Alarm_Manager, self).__init__()
 		#Import settings from Alarms.json
@@ -37,13 +39,15 @@ class Alarm_Manager(Thread):
 			self.gym_list = make_gym_list(settings["gyms"])
 			self.pokemon, self.pokestops, self.gyms   = {}, {}, {}
 			self.alarms = []
-			self.queue = queue
+			self.queue = Queue.Queue()
+			self.data = {}
+			self.lock = threading.Lock()
 			for alarm in alarm_settings:
 				if alarm['active'] == "True" :
 					if alarm['type'] == 'boxcar' :
 						from Boxcar import Boxcar_Alarm
 						self.alarms.append(Boxcar_Alarm(alarm))
-					if alarm['type'] == 'pushbullet' :
+					elif alarm['type'] == 'pushbullet' :
 						from Pushbullet import Pushbullet_Alarm
 						self.alarms.append(Pushbullet_Alarm(alarm))
 					elif alarm['type'] == 'pushover' :
@@ -67,14 +71,31 @@ class Alarm_Manager(Thread):
 				else:
 					log.info("Alarm not activated: " + alarm['type'] + " because value not set to \"True\"")
 	
+	#Update data about this request
+	def update(self, id, info):
+		self.lock.acquire()
+		try:
+			if id not in self.data:
+				self.queue.put(id)
+			self.data[id] = info #update info if changed
+		finally:
+			self.lock.release()
+	
 	#Threaded loop to process request data from the queue 
 	def run(self):
 		log.info("PokeAlarm has started! Your alarms should trigger now.")
 		while True:
 			try:
+				count = 0;
 				for i in range(5000): #Take a break and clean house every 5000 requests handled
-					data = self.queue.get(block=True)
-					self.queue.task_done()
+					id = self.queue.get(block=True)
+					self.lock.acquire()
+					try: #Get id and remove data from the queue
+						data = self.data[id]
+						del self.data[id]
+						self.queue.task_done()
+					finally:
+						self.lock.release()
 					if data['type'] == 'pokemon' :
 						log.debug("Request processing for Pokemon #%s" % data['message']['pokemon_id'])
 						self.trigger_pokemon(data['message'])
@@ -94,7 +115,8 @@ class Alarm_Manager(Thread):
 			except Exception as e:
 				log.error("Error while processing request: %s" % e)
 				log.debug("Stack trace: \n {}".format(traceback.format_exc()))
-				log.debug("Request format: \n %s " % json.dumps(data, indent=4, sort_keys=True))
+				if data:
+					log.debug("Request format: \n %s " % json.dumps(data, indent=4, sort_keys=True))
 	#Send a notification to alarms about a found pokemon
 	def trigger_pokemon(self, pkmn):
 		#If already alerted, skip
@@ -107,16 +129,16 @@ class Alarm_Manager(Thread):
 		pkmn_id = pkmn['pokemon_id']
 		name = get_pkmn_name(pkmn_id)
 		
+		#Check if Pokemon is on the notify list
+		if pkmn_id not in config["NOTIFY_LIST"]:
+			log.info(name + " ignored: notify not enabled.")
+			return
+		
 		#Check if the Pokemon has already expired
 		seconds_left = (dissapear_time - datetime.utcnow()).total_seconds()
 		if seconds_left < config['TIME_LIMIT'] :
 			log.info(name + " ignored: not enough time remaining.")
 			log.debug("Time left must be %f, but was %f." % (config['TIME_LIMIT'], seconds_left))
-			return
-		
-		#Check if Pokemon is on the notify list
-		if pkmn_id not in config["NOTIFY_LIST"]:
-			log.info(name + " ignored: notify not enabled.")
 			return
 
 		#Check if the Pokemon is outside of notify range
@@ -133,7 +155,7 @@ class Alarm_Manager(Thread):
 			if config['GEOFENCE'].contains(lat,lng) is not True:
 				log.info(name + " ignored: outside geofence")
 				return
-				
+
 		#Trigger the notifcations
 		log.info(name + " notication was triggered!")
 		timestamps = get_timestamps(dissapear_time)
@@ -147,10 +169,10 @@ class Alarm_Manager(Thread):
 			'time_left': timestamps[0],
 			'12h_time': timestamps[1],
 			'24h_time': timestamps[2],
-			'dir': get_dir(lat,lng)
+			'dir': get_dir(lat,lng),
+			'respawn_text': get_respawn_text(pkmn.get('respawn_info', 0))
 		}
 		pkmn_info = self.optional_arguments(pkmn_info)
-			
 		for alarm in self.alarms:
 			alarm.pokemon_alert(pkmn_info)
 
@@ -192,7 +214,7 @@ class Alarm_Manager(Thread):
 			if config['GEOFENCE'].contains(lat,lng) is not True:
 				log.info("Pokestop ignored: outside geofence")
 				return
-		
+
 		#Trigger the notifcations
 		log.info("Pokestop notication was triggered!")
 		timestamps = get_timestamps(dissapear_time)
@@ -220,6 +242,7 @@ class Alarm_Manager(Thread):
 		old_team = self.gyms.get(id)
 		new_team = gym.get('team_id', gym.get('team')) 	
 		self.gyms[id] = new_team
+		log.debug("Gym %s - %s to %s" % (id, old_team, new_team))
 		
 		#Check to see if the gym has changed 
 		if old_team == None or new_team == old_team:
