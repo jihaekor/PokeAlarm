@@ -366,9 +366,9 @@ def reverse_location(info):
 		for category in item['types']:
 			loc[category] = item['short_name']
 	details = {
-		'address': "%s %s" % (loc.get('street_number'), loc.get('route'),),
+		'address': ("%s %s" % (loc.get('street_number', ''), loc.get('route', 'Unknown'))).strip(),
 		'postal': "%s" % (loc.get('postal_code')),
-		'neighborhood': loc.get('neighborhood'),
+		'neighborhood': "%s" % (loc.get('neighborhood', loc.get('locality', loc.get('postal_town')))),
 		'sublocality': loc.get('sublocality'),
 		'city': loc.get('locality', loc.get('postal_town')), #try postal town if no city
 		'county': loc.get('administrative_area_level_2'),
