@@ -398,7 +398,7 @@ def get_walking_data(info):
 		result = result.get('rows')[0].get('elements')[0]
 		data = {
 			'walk_dist': result.get('distance').get('text').encode('utf-8'),
-			'walk_time': result.get('duration').get('text').encode('utf-8'),
+			'walk_time': result.get('duration').get('text').encode('utf-8').replace(' hours', 'h').replace(' mins', 'm'),
 		}
 	except Exception as e:
 		log.error("Error geting walking data : %s" % e)
@@ -418,7 +418,7 @@ def get_biking_data(info):
 		result = result.get('rows')[0].get('elements')[0]
 		data = {
 			'bike_dist': result.get('distance').get('text').encode('utf-8'),
-			'bike_time': result.get('duration').get('text').encode('utf-8'),
+			'bike_time': result.get('duration').get('text').encode('utf-8').replace(' hours', 'h').replace(' mins', 'm'),
 		}
 	except Exception as e:
 		log.error("Error geting biking data : %s" % e)
@@ -438,7 +438,7 @@ def get_driving_data(info):
 		result = result.get('rows')[0].get('elements')[0]
 		data = {
 			'drive_dist': result.get('distance').get('text').encode('utf-8'),
-			'drive_time': result.get('duration').get('text').encode('utf-8'),
+			'drive_time': result.get('duration').get('text').encode('utf-8').replace(' hours', 'h').replace(' mins', 'm'),
 		}
 	except Exception as e:
 		log.error("Error geting biking data : %s" % e)
