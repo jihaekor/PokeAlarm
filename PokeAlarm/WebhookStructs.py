@@ -75,12 +75,24 @@ class RocketMap:
             'tiny_rat': '',
             'big_karp': '',
             'gmaps': get_gmaps_link(lat, lng),
-            'applemaps': get_applemaps_link(lat, lng)
+            'applemaps': get_applemaps_link(lat, lng),
+            'allstats': '',
         }
         if pkmn['atk'] != '?' or pkmn['def'] != '?' or pkmn['sta'] != '?':
             pkmn['iv'] = float(((pkmn['atk'] + pkmn['def'] + pkmn['sta']) * 100) / float(45))
         else:
             pkmn['atk'], pkmn['def'], pkmn['sta'] = '?', '?', '?'
+
+        if pkmn['atk'] != '?' and pkmn['def'] != '?' and pkmn['sta'] != '?':
+            pkmn['allstats'] = ' (%.0f'%(pkmn['iv']) + '%' + '/%d/%d/%d)'%(pkmn['atk'], pkmn['def'], pkmn['sta'])
+
+            if pkmn['cp'] != '?':
+                pkmn['allstats'] = pkmn['allstats'][:-1] + '/CP %d)'%(pkmn['cp'])
+
+            if pkmn['level'] != '?':
+                pkmn['allstats'] = pkmn['allstats'][:-1] + '/Lvl %d)'%(pkmn['level'])
+
+        pkmn['allstats'] += ' '
 
         if pkmn['height'] != 'unkn' or pkmn['weight'] != 'unkn':
             pkmn['size'] = get_pokemon_size(pkmn['pkmn_id'], pkmn['height'], pkmn['weight'])
