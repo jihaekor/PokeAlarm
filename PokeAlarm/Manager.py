@@ -721,6 +721,93 @@ class Manager(object):
 
         for thread in threads:
             thread.join()
+            
+    def process_raid(self, raid):
+        # Make sure that pokemon are enabled
+        if self.__raid_settings['enabled'] is False:
+            log.debug("Raid ignored: raid notifications are disabled.")
+            return
+
+        id_ = raid['id']
+
+        # Check for previously processed
+        if id_ in self.__raid_hist:
+            log.debug("Raid was skipped because it was previously processed.")
+            return
+            
+        # Ignore if the Pokemon ID is still missing (it is an egg).
+        # Store the raid start time in this case.
+        if raid['pkmn_id'] == '?':
+            self.__raid_hist[id_] = stop['raid_start']
+            log.info("Raid ({}) ignored: No pokemon exists.".format(id_))
+            return
+            
+        else:
+            # Store the raid end time and continue processing
+            self.__raid_hist[id_] = stop['raid_end']
+            
+        # Extract some useful info that will be used in the filters
+        passed = False
+        lat, lng = raid['lat'], raid['lng']
+        dist = get_earth_dist([lat, lng], self.__latlng)
+        level = raid['level']
+        pkmn_id = raid['pkmn_id']
+        name = self.__pokemon_name[pkmn_id]
+        
+        filters = self.__raid_settings['filters']
+        for filt_ct in range(len(filters)):
+            filt = filters[filt_ct]
+            # Check the distance from the set location
+            if dist != 'unkn':
+                if filt.check_dist(dist) is False:
+                    if self.__quiet is False:
+                        log.info("Raid rejected: distance ({:.2f}) was not in range".format(dist) +
+                                 " {:.2f} to {:.2f} (F #{})".format(filt.min_dist, filt.max_dist, filt_ct))
+                    continue
+            else:
+                log.debug("Raid dist was not checked because the manager has no location set.")
+                
+            if not filt.check_level(level):
+                if self.__quiet is False:
+                    log.info("{} rejected: Level ({}) not in range {} to {} - (F #{})".format(
+                        id_, level, filt.min_level, filt.max_level, filt_ct))
+
+            # Nothing left to check, so it must have passed
+            passed = True
+            log.debug("Raid passed filter #{}".format(filt_ct))
+            break
+
+        if not passed:
+            return
+
+        # Check the geofences
+        raid['geofence'] = self.check_geofences('Raid', lat, lng)
+        if len(self.__geofences) > 0 and raid['geofence'] == 'unknown':
+            log.info("Raid rejected: not within any specified geofence")
+            return
+            
+        time_str = get_time_as_str(raid['raid_end'], self.__timezone)
+        raid.update({
+            "dist": get_dist_as_str(dist),
+            'pkmn': name, 
+            'time_left': time_str[0],
+            '12h_time': time_str[1],
+            '24h_time': time_str[2],
+            'dir': get_cardinal_dir([lat, lng], self.__latlng),
+        })
+        self.add_optional_travel_arguments(raid)
+
+        if self.__quiet is False:
+            log.info("Raid ({}) notification has been triggered!".format(id_))
+
+        threads = []
+        # Spawn notifications in threads so they can work in background
+        for alarm in self.__alarms:
+            threads.append(gevent.spawn(alarm.raid_alert, raid))
+            gevent.sleep(0)  # explict context yield
+
+        for thread in threads:
+            thread.join()
 
     # Check to see if a notification is within the given range
     def check_geofences(self, name, lat, lng):

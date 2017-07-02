@@ -123,6 +123,32 @@ def load_gym_section(settings):
     if gym['enabled'] is False:
         log.info("Gym notifications will NOT be sent. - Enabled is False  ")
     return gym
+    
+def load_raid_section(settings):
+    log.info("Setting Raid filters...")
+    # Set the defaults for "True"
+    # Override defaults using a new Filter to verify inputs
+    default_filt = GymFilter(settings.pop('default', {}), {
+        "min_dist": 0.0, "max_dist": float('inf'), 
+        "min_level": 0, "max_level": 5,
+    }, 'default')
+    default = default_filt.to_dict()
+    # Create the settings for raids
+    raid = {
+        "enabled": bool(parse_boolean(settings.pop('enabled', None)) or False),
+        "filters": create_multi_filter('Raid --> filters', RaidFilter,
+                                       settings.pop('filters', "False"), default)
+    }
+
+    reject_leftover_parameters(settings, 'Raid section of Filters file.')  # Check for leftovers
+
+    for filt in raid['filters']:
+        log.debug("Raid Level(s) {} to {} between {} and {}.".format(
+            filt.min_level, filt.max_level, get_dist_as_str(filt.min_dist), get_dist_as_str(filt.max_dist)
+        ))
+    if raid['enabled'] is False:
+        log.info("Raid notifications will NOT be sent. - Enabled is False  ")
+    return raid
 
 
 class Filter(object):
@@ -401,6 +427,39 @@ class GymFilter(Filter):
                           + "Please see documentation for accepted team names and correct your Filters file.")
                 sys.exit(1)
         return s
+        
+#  Used to determine when Raid notifications will be triggered.
+class RaidFilter(Filter):
+
+    def __init__(self, settings, default, location):
+        self.min_dist = float(settings.pop('min_dist', None) or default['min_dist'])
+        self.max_dist = float(settings.pop('max_dist', None) or default['max_dist'])
+        
+        # Level
+        self.min_level = int(settings.pop('min_level', None) or default['min_level'])
+        self.max_level = int(settings.pop('max_level', None) or default['max_level'])
+
+        reject_leftover_parameters(settings, "pokemon filter under '{}'".format(location))
+
+    # Checks the given distance against this filter
+    def check_dist(self, dist):
+        return self.min_dist <= dist <= self.max_dist
+        
+    # Checks the Level against this filter
+    def check_level(self, level):
+        return self.min_level <= level <= self.max_level
+
+    # Convert this filter to a dict
+    def to_dict(self):
+        return {
+            "min_dist": self.min_dist, "max_dist": self.max_dist,
+            "min_level": self.min_level, "max_level": self.max_level,
+        }
+
+    # Print this filter
+    def to_string(self):
+        return "Dist: {} to {}, ".format(self.min_dist, self.max_dist) + 
+               "Level: {} to {}, ".format(self.min_level, self.max_level)
 
 
 class Geofence(object):

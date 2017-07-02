@@ -147,7 +147,8 @@ class RocketMap:
         log.debug("Converting to raid: \n {}".format(data))
         raid = {
             'type': "raid", 
-            'pkmn_id':eck_for_none(int, data.get('pokemon_id'), '?'), 
+            'id': data.get('gym_id'), 
+            'pkmn_id': check_for_none(int, data.get('pokemon_id'), '?'), 
             'pkmn_cp': check_for_none(int, data.get('cp'), '?'),
             'lat': float(data['latitude']),
             'lng': float(data['longitude']),
