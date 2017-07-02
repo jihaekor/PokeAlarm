@@ -47,8 +47,8 @@ class Manager(object):
         self.__quiet = quiet
 
         # Load and Setup the Pokemon Filters
-        self.__pokemon_settings, self.__pokestop_settings, self.__gym_settings = {}, {}, {}
-        self.__pokemon_hist, self.__pokestop_hist, self.__gym_hist = {}, {}, {}
+        self.__pokemon_settings, self.__pokestop_settings, self.__gym_settings, self.__raid_settings = {}, {}, {}, {}
+        self.__pokemon_hist, self.__pokestop_hist, self.__gym_hist, self.__raid_hist = {}, {}, {}, {}
         self.load_filter_file(get_path(filter_file))
 
         # Create the Geofences to filter with from given file
@@ -99,6 +99,10 @@ class Manager(object):
             # Load in the Gym Section
             self.__gym_settings = load_gym_section(
                 require_and_remove_key('gyms', filters, "Filters file."))
+
+            # Load in the Raid Section
+            self.__raid_settings = load_raid_section(
+                require_and_remove_key('raids', filters, "Filters file."))
 
             return
 
@@ -289,7 +293,7 @@ class Manager(object):
 
     # Clean out the expired objects from histories (to prevent oversized sets)
     def clean_hist(self):
-        for dict_ in (self.__pokemon_hist, self.__pokestop_hist):
+        for dict_ in (self.__pokemon_hist, self.__pokestop_hist, self.__raid_hist):
             old = []
             for id_ in dict_:  # Gather old events
                 if dict_[id_] < datetime.utcnow():
