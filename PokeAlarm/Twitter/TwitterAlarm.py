@@ -32,7 +32,7 @@ class TwitterAlarm(Alarm):
             'status': "A Team <old_team> gym has fallen! It is now controlled by <new_team>. <gmaps>"
         }, 
         'raid': {
-            'status': "A new raid of <pkmn> has started, until <24h_time> (time_left>). <gmaps>", 
+            'status': "A raid of <pkmn> has started! Available until <24h_time> (time_left>). <gmaps>", 
         }
     }
 
