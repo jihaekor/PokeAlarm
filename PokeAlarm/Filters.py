@@ -128,7 +128,7 @@ def load_raid_section(settings):
     log.info("Setting Raid filters...")
     # Set the defaults for "True"
     # Override defaults using a new Filter to verify inputs
-    default_filt = GymFilter(settings.pop('default', {}), {
+    default_filt = RaidFilter(settings.pop('default', {}), {
         "min_dist": 0.0, "max_dist": float('inf'), 
         "min_level": 0, "max_level": 5,
     }, 'default')
@@ -458,7 +458,7 @@ class RaidFilter(Filter):
 
     # Print this filter
     def to_string(self):
-        return "Dist: {} to {}, ".format(self.min_dist, self.max_dist) + 
+        return "Dist: {} to {}, ".format(self.min_dist, self.max_dist) + \
                "Level: {} to {}, ".format(self.min_level, self.max_level)
 
 
