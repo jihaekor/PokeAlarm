@@ -755,7 +755,6 @@ class Manager(object):
         level = raid['level']
         pkmn_id = raid['pkmn_id']
         name = self.__pokemon_name[pkmn_id]
-        log.debug("Raid information: Pokemon ID %d; Level %d"%(pkmn_id, level))
         
         filters = self.__raid_settings['filters']
         for filt_ct in range(len(filters)):
@@ -772,8 +771,8 @@ class Manager(object):
                 
             if not filt.check_level(level):
                 if self.__quiet is False:
-                    log.info("{} rejected: Level ({}) not in range {} to {} - (F #{})".format(
-                        id_, level, filt.min_level, filt.max_level, filt_ct))
+                    log.info("Raid rejected: Level ({}) not in range {} to {} - (F #{})".format(
+                        level, filt.min_level, filt.max_level, filt_ct))
                 continue
 
             # Nothing left to check, so it must have passed
