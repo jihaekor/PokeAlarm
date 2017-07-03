@@ -798,7 +798,7 @@ class Manager(object):
         self.add_optional_travel_arguments(raid)
 
         if self.__quiet is False:
-            log.info("Raid ({}) notification has been triggered!".format(id_))
+            log.info("Raid ({}/{}) notification has been triggered!".format(id_, name))
 
         threads = []
         # Spawn notifications in threads so they can work in background
