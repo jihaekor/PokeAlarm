@@ -284,6 +284,8 @@ class Manager(object):
                     self.process_pokestop(obj)
                 elif kind == "gym":
                     self.process_gym(obj)
+                elif kind == "raid":
+                    self.process_raid(obj)
                 else:
                     log.error("!!! Manager does not support {} objects!".format(kind))
                 log.debug("Finished processing object {} with id {}".format(obj['type'], obj['id']))
