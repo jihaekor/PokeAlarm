@@ -663,7 +663,7 @@ class Manager(object):
                                  " {:.2f} to {:.2f} (F #{})".format(dist, filt.min_dist, filt.max_dist, filt_ct))
                     continue
             else:
-                log.debug("Pokestop dist was not checked because the manager has no location set.")
+                log.debug("Gym dist was not checked because the manager has no location set.")
 
             # Check the old team
             if filt.check_from_team(from_team_id) is False:
@@ -740,13 +740,13 @@ class Manager(object):
         # Ignore if the Pokemon ID is still missing (it is an egg).
         # Store the raid start time in this case.
         if raid['pkmn_id'] == '?':
-            self.__raid_hist[id_] = stop['raid_start']
+            self.__raid_hist[id_] = raid['raid_start']
             log.info("Raid ({}) ignored: No pokemon exists.".format(id_))
             return
             
         else:
             # Store the raid end time and continue processing
-            self.__raid_hist[id_] = stop['raid_end']
+            self.__raid_hist[id_] = raid['raid_end']
             
         # Extract some useful info that will be used in the filters
         passed = False
