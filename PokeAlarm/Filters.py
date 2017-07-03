@@ -439,7 +439,7 @@ class RaidFilter(Filter):
         self.min_level = int(settings.pop('min_level', None) or default['min_level'])
         self.max_level = int(settings.pop('max_level', None) or default['max_level'])
 
-        reject_leftover_parameters(settings, "pokemon filter under '{}'".format(location))
+        reject_leftover_parameters(settings, "Raid filter in {}".format(location))
 
     # Checks the given distance against this filter
     def check_dist(self, dist):
