@@ -153,9 +153,9 @@ class RocketMap:
             'lat': float(data['latitude']),
             'lng': float(data['longitude']),
             'level': data.get('level'),
-            'spawn': datetime.utcfromtimestamp(data.get('spawn') / 1000.),
-            'raid_start': datetime.utcfromtimestamp(data.get('raid_start') / 1000.),
-            'raid_end': datetime.utcfromtimestamp(data.get('raid_end') / 1000.),
+            'spawn': datetime.utcfromtimestamp(data.get('spawn')),
+            'raid_start': datetime.utcfromtimestamp(data.get('start')),
+            'raid_end': datetime.utcfromtimestamp(data.get('end')),
         }
         raid['gmaps'] = get_gmaps_link(raid['lat'], raid['lng'])
         raid['applemaps'] = get_applemaps_link(raid['lat'], raid['lng'])
