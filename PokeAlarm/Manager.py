@@ -740,7 +740,6 @@ class Manager(object):
         # Ignore if the Pokemon ID is still missing (it is an egg).
         # Store the raid start time in this case.
         if raid['pkmn_id'] == '?':
-            self.__raid_hist[id_] = raid['raid_start']
             log.info("Raid ({}) ignored: No pokemon exists.".format(id_))
             return
             
