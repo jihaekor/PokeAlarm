@@ -84,14 +84,14 @@ class RocketMap:
             pkmn['iv'] = float(((pkmn['atk'] + pkmn['def'] + pkmn['sta']) * 100) / float(45))
         else:
             pkmn['atk'], pkmn['def'], pkmn['sta'] = '?', '?', '?'
+        
+        if pkmn['cp'] != '?' and pkmn['cp'] != 0:
+            if pkmn['atk'] != '?' and pkmn['def'] != '?' and pkmn['sta'] != '?':
+                pkmn['allstats'] = ' (%.0f'%(pkmn['iv']) + '%' + '/%d/%d/%d)'%(pkmn['atk'], pkmn['def'], pkmn['sta'])
+                
+            pkmn['allstats'] = pkmn['allstats'][:-1] + '/CP %d)'%(pkmn['cp'])
 
-        if pkmn['atk'] != '?' and pkmn['def'] != '?' and pkmn['sta'] != '?':
-            pkmn['allstats'] = ' (%.0f'%(pkmn['iv']) + '%' + '/%d/%d/%d)'%(pkmn['atk'], pkmn['def'], pkmn['sta'])
-
-            if pkmn['cp'] != '?':
-                pkmn['allstats'] = pkmn['allstats'][:-1] + '/CP %d)'%(pkmn['cp'])
-
-            if pkmn['level'] != '?':
+            if pkmn['level'] != '?' and pkmn['level'] != 0:
                 pkmn['allstats'] = pkmn['allstats'][:-1] + '/Lvl %d)'%(pkmn['level'])
 
         pkmn['allstats'] += ' '
