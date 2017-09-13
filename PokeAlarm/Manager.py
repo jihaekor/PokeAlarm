@@ -516,6 +516,22 @@ class Manager(object):
                 log.info("Egg {} is higher ({}) than max ({}) level, ignore"
                          .format(egg['id'], level, settings['max_level']))
             return False
+            
+        lat, lng = egg['lat'], egg['lng']
+        dist = get_earth_dist([lat, lng], self.__latlng)
+        
+        if dist != 'unkn':
+            if dist > settings['max_dist']:
+                if self.__quiet is False:
+                    log.info("Egg {} is too far away ({} > {}), ignore"
+                             .format(egg['id'], dist, settings['max_dist']))
+                return False
+                
+            if dist < settings['min_dist']:
+                if self.__quiet is False:
+                    log.info("Egg {} is too close ({} < {}), ignore"
+                             .format(egg['id'], dist, settings['max_dist']))
+                return False
 
         return True
 
@@ -583,9 +599,9 @@ class Manager(object):
             '12h_time': time_str[1],
             '24h_time': time_str[2],
             'dir': get_cardinal_dir([lat, lng], self.__latlng),
-            'iv_0': "{:.0f}".format(iv) if iv != '?' else '?',
-            'iv': "{:.1f}".format(iv) if iv != '?' else '?',
-            'iv_2': "{:.2f}".format(iv) if iv != '?' else '?',
+            'iv_0': "{:.0f}%".format(iv) if iv != '?' else '?',
+            'iv': "{:.1f}%".format(iv) if iv != '?' else '?',
+            'iv_2': "{:.2f}%".format(iv) if iv != '?' else '?',
             'quick_move': self.__move_name.get(quick_id, 'unknown'),
             'charge_move': self.__move_name.get(charge_id, 'unknown')
         })
