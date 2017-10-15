@@ -534,7 +534,7 @@ class Manager(object):
             return False
             
         lat, lng = egg['lat'], egg['lng']
-        dist = get_earth_dist([lat, lng], self.__latlng)
+        dist = get_earth_dist([lat, lng], self.__location)
         
         if dist != 'unkn':
             if dist > settings['max_dist']:
