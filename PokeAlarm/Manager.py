@@ -1025,9 +1025,6 @@ class Manager(object):
         form = self.__locale.get_form_name(pkmn_id, form_id)
         min_cp, max_cp = get_pokemon_cp_range(pkmn_id, 20)
 
-        #team id saved in self.__gym_hist when processing gym
-        team_id = self.__gym_hist.get(gym_id, '?')
-
         raid.update({
             'pkmn': name,
             'pkmn_id_3': '{:03}'.format(pkmn_id),
