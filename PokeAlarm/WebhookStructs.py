@@ -86,13 +86,8 @@ class RocketMap:
             'gmaps': get_gmaps_link(lat, lng),
             'applemaps': get_applemaps_link(lat, lng), 
             'allstats': '',
-            'gender_form': '?', 
         }
-        if pkmn['pkmn_id'] == 201:
-            pkmn['gender_form'] = pkmn['form_id']
-        else:
-            pkmn['gender_form'] = pkmn['gender']
-            
+
         if pkmn['atk'] != '?' or pkmn['def'] != '?' or pkmn['sta'] != '?':
             pkmn['iv'] = float(((pkmn['atk'] + pkmn['def'] + pkmn['sta']) * 100) / float(45))
         else:

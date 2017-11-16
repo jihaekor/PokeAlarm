@@ -628,6 +628,10 @@ class Manager(object):
         iv = pkmn['iv']
         form_id = pkmn['form_id']
         form = self.__locale.get_form_name(pkmn_id, form_id)
+        if pkmn_id == 201:
+            form_gender = form
+        else:
+            form_gender = pkmn['gender']
 
         pkmn.update({
             'pkmn': name,
@@ -644,7 +648,8 @@ class Manager(object):
             'charge_move': self.__locale.get_move_name(charge_id),
             'form_id_or_empty': '' if form_id == '?' else '{:03}'.format(form_id),
             'form': form,
-            'form_or_empty': '' if form == 'unknown' else form
+            'form_or_empty': '' if form == 'unknown' else form,
+            'gender_form': form_gender
         })
         if self.__loc_service:
             self.__loc_service.add_optional_arguments(self.__location, [lat, lng], pkmn)
