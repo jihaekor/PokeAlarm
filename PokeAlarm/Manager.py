@@ -413,8 +413,7 @@ class Manager(object):
                 if filt.check_dist(dist) is False:
                     if self.__quiet is False:
                         log.info(
-                            "{} rejected: distance ({}) was not in "
-                            + "range {} to {} (F #{})".format(
+                            "{} rejected: distance ({}) was not in range {} to {} (F #{})".format(
                                 name, dist, filt.min_dist,
                                 filt.max_dist, filt_ct))
                     continue
@@ -427,15 +426,13 @@ class Manager(object):
                 if not filt.check_cp(cp):
                     if self.__quiet is False:
                         log.info(
-                            "{} rejected: CP ({}) not in range "
-                            + "{} to {} - (F #{})".format(
+                            "{} rejected: CP ({}) not in range {} to {} - (F #{})".format(
                                 name, cp, filt.min_cp,
                                 filt.max_cp, filt_ct))
                     continue
             else:
                 if filt.ignore_missing is True:
-                    log.info("{} rejected: CP information was missing - "
-                             + "(F #{})".format(name, filt_ct))
+                    log.info("{} rejected: CP information was missing - (F #{})".format(name, filt_ct))
                     continue
                 log.debug("Pokemon 'cp' was not checked "
                           + "because it was missing.")
@@ -445,15 +442,13 @@ class Manager(object):
                 if not filt.check_level(level):
                     if self.__quiet is False:
                         log.info(
-                            "{} rejected: Level ({}) not "
-                            + "in range {} to {} - (F #{})".format(
+                            "{} rejected: Level ({}) not in range {} to {} - (F #{})".format(
                                 name, level, filt.min_level,
                                 filt.max_level, filt_ct))
                     continue
             else:
                 if filt.ignore_missing is True:
-                    log.info("{} rejected: Level information was missing "
-                             + "- (F #{})".format(name, filt_ct))
+                    log.info("{} rejected: Level information was missing - (F #{})".format(name, filt_ct))
                     continue
                 log.debug("Pokemon 'level' was not checked because "
                           + "it was missing.")
@@ -469,27 +464,23 @@ class Manager(object):
                     continue
             else:
                 if filt.ignore_missing is True:
-                    log.info("{} rejected: 'IV' information was missing "
-                             + "(F #{})".format(name, filt_ct))
+                    log.info("{} rejected: 'IV' information was missing (F #{})".format(name, filt_ct))
                     continue
-                log.debug("Pokemon IV percent was not checked because "
-                          + "it was missing.")
+                log.debug("Pokemon IV percent was not checked because it was missing.")
 
             # Check the Attack IV of the Pokemon
             if atk != '?':
                 if not filt.check_atk(atk):
                     if self.__quiet is False:
                         log.info(
-                            "{} rejected: Attack IV ({}) not in "
-                            + "range {} to {} - (F #{})".format(
+                            "{} rejected: Attack IV ({}) not in range {} to {} - (F #{})".format(
                                 name, atk, filt.min_atk,
                                 filt.max_atk, filt_ct))
 
                     continue
             else:
                 if filt.ignore_missing is True:
-                    log.info("{} rejected: Attack IV information was missing "
-                             + "- (F #{})".format(name, filt_ct))
+                    log.info("{} rejected: Attack IV information was missing - (F #{})".format(name, filt_ct))
                     continue
                 log.debug("Pokemon 'atk' was not checked because "
                           + "it was missing.")
@@ -499,15 +490,13 @@ class Manager(object):
                 if not filt.check_def(def_):
                     if self.__quiet is False:
                         log.info(
-                            "{} rejected: Defense IV ({}) not in "
-                            + "range {} to {} - (F #{})".format(
+                            "{} rejected: Defense IV ({}) not in range {} to {} - (F #{})".format(
                                 name, def_, filt.min_atk,
                                 filt.max_atk, filt_ct))
                     continue
             else:
                 if filt.ignore_missing is True:
-                    log.info("{} rejected: Defense IV information was missing "
-                             + "- (F #{})".format(name, filt_ct))
+                    log.info("{} rejected: Defense IV information was missing - (F #{})".format(name, filt_ct))
                     continue
                 log.debug("Pokemon 'def' was not checked because it "
                           + "was missing.")
@@ -517,15 +506,13 @@ class Manager(object):
                 if not filt.check_sta(sta):
                     if self.__quiet is False:
                         log.info(
-                            "{} rejected: Stamina IV ({}) not in range "
-                            + "{} to {} - (F #{}).".format(
+                            "{} rejected: Stamina IV ({}) not in range {} to {} - (F #{}).".format(
                                 name, sta, filt.min_sta,
                                 filt.max_sta, filt_ct))
                     continue
             else:
                 if filt.ignore_missing is True:
-                    log.info("{} rejected: Stamina IV information was missing"
-                             + " - (F #{})".format(name, filt_ct))
+                    log.info("{} rejected: Stamina IV information was missing - (F #{})".format(name, filt_ct))
                     continue
                 log.debug("Pokemon 'sta' was not checked because it"
                           + " was missing.")
@@ -534,13 +521,11 @@ class Manager(object):
             if quick_id != '?':
                 if not filt.check_quick_move(quick_id):
                     if self.__quiet is False:
-                        log.info("{} rejected: Quick move was not correct - "
-                                 + "(F #{})".format(name, filt_ct))
+                        log.info("{} rejected: Quick move was not correct - (F #{})".format(name, filt_ct))
                     continue
             else:
                 if filt.ignore_missing is True:
-                    log.info("{} rejected: Quick move information was missing"
-                             + " - (F #{})".format(name, filt_ct))
+                    log.info("{} rejected: Quick move information was missing - (F #{})".format(name, filt_ct))
                     continue
                 log.debug("Pokemon 'quick_id' was not checked because "
                           + "it was missing.")
@@ -549,13 +534,11 @@ class Manager(object):
             if charge_id != '?':
                 if not filt.check_charge_move(charge_id):
                     if self.__quiet is False:
-                        log.info("{} rejected: Charge move was not correct - "
-                                 + "(F #{})".format(name, filt_ct))
+                        log.info("{} rejected: Charge move was not correct - (F #{})".format(name, filt_ct))
                     continue
             else:
                 if filt.ignore_missing is True:
-                    log.info("{} rejected: Charge move information was missing"
-                             + " - (F #{})".format(name, filt_ct))
+                    log.info("{} rejected: Charge move information was missing - (F #{})".format(name, filt_ct))
                     continue
                 log.debug("Pokemon 'charge_id' was not checked because "
                           + "it was missing.")
@@ -564,13 +547,11 @@ class Manager(object):
             if quick_id != '?' and charge_id != '?':
                 if not filt.check_moveset(quick_id, charge_id):
                     if self.__quiet is False:
-                        log.info("{} rejected: Moveset was not correct - "
-                                 + "(F #{})".format(name, filt_ct))
+                        log.info("{} rejected: Moveset was not correct - (F #{})".format(name, filt_ct))
                     continue
             else:  # This will probably never happen? but just to be safe...
                 if filt.ignore_missing is True:
-                    log.info("{} rejected: Moveset information was missing - "
-                             + " (F #{})".format(name, filt_ct))
+                    log.info("{} rejected: Moveset information was missing - (F #{})".format(name, filt_ct))
                     continue
                 log.debug("Pokemon 'moveset' was not checked because "
                           + "it was missing.")
@@ -579,13 +560,11 @@ class Manager(object):
             if size != 'unknown':
                 if not filt.check_size(size):
                     if self.__quiet is False:
-                        log.info("{} rejected: Size ({}) was not correct "
-                                 + "- (F #{})".format(name, size, filt_ct))
+                        log.info("{} rejected: Size ({}) was not correct - (F #{})".format(name, size, filt_ct))
                     continue
             else:
                 if filt.ignore_missing is True:
-                    log.info("{} rejected: Size information was missing "
-                             + "- (F #{})".format(name, filt_ct))
+                    log.info("{} rejected: Size information was missing - (F #{})".format(name, filt_ct))
                     continue
                 log.debug("Pokemon 'size' was not checked because it "
                           + "was missing.")
@@ -594,13 +573,11 @@ class Manager(object):
             if gender != 'unknown':
                 if not filt.check_gender(gender):
                     if self.__quiet is False:
-                        log.info("{} rejected: Gender ({}) was not correct "
-                                 + "- (F #{})".format(name, gender, filt_ct))
+                        log.info("{} rejected: Gender ({}) was not correct - (F #{})".format(name, gender, filt_ct))
                     continue
             else:
                 if filt.ignore_missing is True:
-                    log.info("{} rejected: Gender information was missing "
-                             + "- (F #{})".format(name, filt_ct))
+                    log.info("{} rejected: Gender information was missing - (F #{})".format(name, filt_ct))
                     continue
                 log.debug("Pokemon 'gender' was not checked because it "
                           + "was missing.")
@@ -609,8 +586,7 @@ class Manager(object):
             if form_id != '?':
                 if not filt.check_form(form_id):
                     if self.__quiet is False:
-                        log.info("{} rejected: Form ({}) was not correct "
-                                 + "- (F #{})".format(name, form_id, filt_ct))
+                        log.info("{} rejected: Form ({}) was not correct - (F #{})".format(name, form_id, filt_ct))
                     continue
 
             # Nothing left to check, so it must have passed
