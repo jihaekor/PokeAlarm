@@ -413,8 +413,8 @@ class Manager(object):
                 if filt.check_dist(dist) is False:
                     if self.__quiet is False:
                         log.info(
-                            "{} rejected: distance ({:.2f}) was not in "
-                            + "range {:.2f} to {:.2f} (F #{})".format(
+                            "{} rejected: distance ({}) was not in "
+                            + "range {} to {} (F #{})".format(
                                 name, dist, filt.min_dist,
                                 filt.max_dist, filt_ct))
                     continue

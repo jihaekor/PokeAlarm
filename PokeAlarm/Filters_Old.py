@@ -245,6 +245,7 @@ class PokemonFilter(Filter):
 
     # Checks the given distance against this filter
     def check_dist(self, dist):
+        log.debug("Min: {:.2f}; Max: {:.2f}; Distance: {:.2f}".format(self.min_dist, self.max_dist, dist))
         return self.min_dist <= dist <= self.max_dist
 
     # Checks the CP against this filter
@@ -257,7 +258,7 @@ class PokemonFilter(Filter):
 
     # Checks the IV percent against this filter
     def check_iv(self, iv):
-        log.debug("Min: {}; Max: {}; IV: {}".format(self.min_iv, self.max_iv, iv))
+        log.debug("Min: {:.2f}; Max: {:.2f}; IV: {:.2f}".format(self.min_iv, self.max_iv, iv))
         return self.min_iv <= iv <= self.max_iv
 
     # Checks the attack IV against this filter
