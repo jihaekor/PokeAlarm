@@ -459,14 +459,11 @@ class Manager(object):
                           + "it was missing.")
 
             # Check the IV percent of the Pokemon
-            log.debug("{} IV: {}".format(name, iv))
             if iv != '?':
-                log.debug("IV exists; {} IV: {}".format(name, iv))
                 if not filt.check_iv(iv):
                     if self.__quiet is False:
                         log.info(
-                            "{} rejected: IV percent ({:.2f}) not in "
-                            + "range {:.2f} to {:.2f} - (F #{})".format(
+                            "{} rejected: IV percent ({}) not in range {} to {} - (F #{})".format(
                                 name, iv, filt.min_iv,
                                 filt.max_iv, filt_ct))
                     continue
