@@ -257,6 +257,7 @@ class PokemonFilter(Filter):
 
     # Checks the IV percent against this filter
     def check_iv(self, iv):
+        log.debug("Min: {}; Max: {}; IV: {}".format(self.min_iv, self.max_iv, iv))
         return self.min_iv <= iv <= self.max_iv
 
     # Checks the attack IV against this filter

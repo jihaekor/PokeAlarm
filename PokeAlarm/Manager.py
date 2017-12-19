@@ -459,7 +459,9 @@ class Manager(object):
                           + "it was missing.")
 
             # Check the IV percent of the Pokemon
+            log.debug("{} IV: {}".format(name, iv))
             if iv != '?':
+                log.debug("IV exists; {} IV: {}".format(name, iv))
                 if not filt.check_iv(iv):
                     if self.__quiet is False:
                         log.info(
@@ -696,9 +698,7 @@ class Manager(object):
         dist = get_earth_dist([lat, lng], self.__location)
 
         pkmn['pkmn'] = name
-
         filters = self.__pokemon_settings['filters'][pkmn_id]
-        log.debug("{} IV: {}".format(name, pkmn['iv']))
         passed = self.check_pokemon_filter(filters, pkmn, dist)
         # If we didn't pass any filters
         if not passed:
