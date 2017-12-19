@@ -153,7 +153,7 @@ def load_egg_section(settings):
         "min_level": int(settings.pop('min_level', 0) or 0),
         "max_level": int(settings.pop('max_level', 10) or 10), 
         "min_dist": float(settings.pop('min_dist', 0.0) or 0.0), 
-        "max_dist": float(settings.pop('max_dist', float('inf')) or float('inf'))
+        "max_dist": float(settings.pop('max_dist', float('inf')) or float('inf')), 
         "contains": settings.pop('gymname_contains', [])
     }
 
@@ -256,8 +256,8 @@ class PokemonFilter(Filter):
         return self.min_level <= level <= self.max_level
 
     # Checks the IV percent against this filter
-    def check_iv(self, dist):
-        return self.min_iv <= dist <= self.max_iv
+    def check_iv(self, iv):
+        return self.min_iv <= iv <= self.max_iv
 
     # Checks the attack IV against this filter
     def check_atk(self, atk):

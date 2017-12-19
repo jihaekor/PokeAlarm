@@ -698,6 +698,7 @@ class Manager(object):
         pkmn['pkmn'] = name
 
         filters = self.__pokemon_settings['filters'][pkmn_id]
+        log.debug("{} IV: {}".format(name, pkmn['iv']))
         passed = self.check_pokemon_filter(filters, pkmn, dist)
         # If we didn't pass any filters
         if not passed:
