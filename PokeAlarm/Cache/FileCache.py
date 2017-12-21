@@ -55,6 +55,5 @@ class FileCache(Cache):
             with portalocker.Lock(self._file, timeout=5, mode="wb+") as f:
                 pickle.dump(data, f, protocol=pickle.HIGHEST_PROTOCOL)
         except Exception as e:
-            log.error("Encountered error while saving cache: "
-                      + "{}: {}".format(type(e).__name__, e))
+            log.error("Encountered error while saving cache: {}: {}".format(type(e).__name__, e))
             log.debug("Stack trace: \n {}".format(traceback.format_exc()))

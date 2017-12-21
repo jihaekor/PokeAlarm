@@ -862,11 +862,8 @@ class Manager(object):
             if dist != 'unkn':
                 if filt.check_dist(dist) is False:
                     if self.__quiet is False:
-                        log.info("Gym rejected: distance ({:.2f})"
-                                 " was not in range"
-                                 " {:.2f} to {:.2f} (F #{})".format(
-                                     dist, filt.min_dist,
-                                     filt.max_dist, filt_ct))
+                        log.info("Gym rejected: distance ({:.2f}) was not in range {:.2f} to {:.2f} (F #{})".format(
+                                     dist, filt.min_dist, filt.max_dist, filt_ct))
                     continue
             else:
                 log.debug("Gym dist was not checked because the manager "
@@ -875,14 +872,12 @@ class Manager(object):
             # Check the old team
             if filt.check_from_team(from_team_id) is False:
                 if self.__quiet is False:
-                    log.info("Gym rejected: {} as old team is not correct "
-                             " (F #{})".format(old_team, filt_ct))
+                    log.info("Gym rejected: {} as old team is not correct (F #{})".format(old_team, filt_ct))
                 continue
             # Check the new team
             if filt.check_to_team(to_team_id) is False:
                 if self.__quiet is False:
-                    log.info("Gym rejected: {} as current team is not correct "
-                             "(F #{})".format(cur_team, filt_ct))
+                    log.info("Gym rejected: {} as current team is not correct (F #{})".format(cur_team, filt_ct))
                 continue
 
             # Nothing left to check, so it must have passed
@@ -909,8 +904,7 @@ class Manager(object):
                     log.info("Gym update ignored: located outside geofences.")
                 return
         else:
-            log.debug("Gym inside geofences was not checked because "
-                      " no geofences were set.")
+            log.debug("Gym inside geofences was not checked because no geofences were set.")
 
         gym_info = self.__cache.get_gym_info(gym_id)
 
@@ -932,8 +926,7 @@ class Manager(object):
                 self.__location, [lat, lng], gym)
 
         if self.__quiet is False:
-            log.info("Gym ({}) notification has been "
-                     "triggered!".format(gym_id))
+            log.info("Gym ({}) notification has been triggered!".format(gym_id))
 
         threads = []
         # Spawn notifications in threads so they can work in background
@@ -956,8 +949,7 @@ class Manager(object):
         # Check if egg has been processed yet
         if self.__cache.get_egg_expiration(gym_id) is not None:
             if self.__quiet is False:
-                log.info("Egg {} ignored - previously "
-                         "processed.".format(gym_id))
+                log.info("Egg {} ignored - previously processed.".format(gym_id))
             return
 
         # Update egg hatch
@@ -976,27 +968,22 @@ class Manager(object):
 
         # Check if egg gym filter has a contains field and if so check it
         if len(self.__egg_settings['contains']) > 0:
-            log.debug("Egg gymname_contains "
-                      "filter: '{}'".format(self.__egg_settings['contains']))
+            log.debug("Egg gymname_contains filter: '{}'".format(self.__egg_settings['contains']))
             log.debug("Egg Gym Name is '{}'".format(gym_info['name'].lower()))
             log.debug("Egg Gym Info is '{}'".format(gym_info))
             if not any(x in gym_info['name'].lower()
                        for x in self.__egg_settings['contains']):
-                log.info("Egg {} ignored: gym name did not match the "
-                         "gymname_contains "
-                         "filter.".format(gym_id))
+                log.info("Egg {} ignored: gym name did not match the gymname_contains filter.".format(gym_id))
                 return
 
         # Check if raid is in geofences
         egg['geofence'] = self.check_geofences('Raid', lat, lng)
         if len(self.__geofences) > 0 and egg['geofence'] == 'unknown':
             if self.__quiet is False:
-                log.info("Egg {} ignored: located outside "
-                         "geofences.".format(gym_id))
+                log.info("Egg {} ignored: located outside geofences.".format(gym_id))
             return
         else:
-            log.debug("Egg inside geofence was not checked because no "
-                      "geofences were set.")
+            log.debug("Egg inside geofence was not checked because no geofences were set.")
 
         # check if the level is in the filter range or if we are ignoring eggs
         passed = self.check_egg_filter(self.__egg_settings, egg)
@@ -1010,8 +997,7 @@ class Manager(object):
                 self.__location, [lat, lng], egg)
 
         if self.__quiet is False:
-            log.info("Egg ({})  notification has been "
-                     "triggered!").format(gym_id)
+            log.info("Egg ({}) notification has been triggered!").format(gym_id)
 
         time_str = get_time_as_str(egg['raid_end'], self.__timezone)
         start_time_str = get_time_as_str(egg['raid_begin'], self.__timezone)
@@ -1060,8 +1046,7 @@ class Manager(object):
         # Check if raid has been processed
         if self.__cache.get_raid_expiration(gym_id) is not None:
             if self.__quiet is False:
-                log.info("Raid {} ignored. Was previously "
-                         "processed.").format(gym_id)
+                log.info("Raid {} ignored. Was previously processed.").format(gym_id)
             return
 
         self.__cache.update_raid_expiration(gym_id, raid_end)
@@ -1079,27 +1064,22 @@ class Manager(object):
 
         # Check if raid gym filter has a contains field and if so check it
         if len(self.__raid_settings['contains']) > 0:
-            log.debug("Raid gymname_contains "
-                      "filter: '{}'".format(self.__raid_settings['contains']))
+            log.debug("Raid gymname_contains filter: '{}'".format(self.__raid_settings['contains']))
             log.debug("Raid Gym Name is '{}'".format(gym_info['name'].lower()))
             log.debug("Raid Gym Info is '{}'".format(gym_info))
             if not any(x in gym_info['name'].lower()
                        for x in self.__raid_settings['contains']):
-                log.info("Raid {} ignored: gym name did not match the "
-                         "gymname_contains "
-                         "filter.".format(gym_id))
+                log.info("Raid {} ignored: gym name did not match the gymname_contains filter.".format(gym_id))
                 return
 
         # Check if raid is in geofences
         raid['geofence'] = self.check_geofences('Raid', lat, lng)
         if len(self.__geofences) > 0 and raid['geofence'] == 'unknown':
             if self.__quiet is False:
-                log.info("Raid {} ignored: located outside "
-                         "geofences.".format(gym_id))
+                log.info("Raid {} ignored: located outside geofences.".format(gym_id))
             return
         else:
-            log.debug("Raid inside geofence was not checked "
-                      " because no geofences were set.")
+            log.debug("Raid inside geofence was not checked because no geofences were set.")
 
         quick_id = raid['quick_id']
         charge_id = raid['charge_id']
@@ -1140,8 +1120,7 @@ class Manager(object):
                 self.__location, [lat, lng], raid)
 
         if self.__quiet is False:
-            log.info("Raid ({}) notification "
-                     "has been triggered!".format(gym_id))
+            log.info("Raid ({}) notification has been triggered!".format(gym_id))
 
         time_str = get_time_as_str(
             raid['raid_end'], self.__timezone)
