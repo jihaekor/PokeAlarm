@@ -130,6 +130,7 @@ def get_team_id(team_name):
 def get_weather(weather_id):
     if not hasattr(get_weather, 'info'):
         get_weather.info = {
+            0: 'None', 
             1: 'Sunny/Clear',
             2: 'Rain',
             3: 'Partly Cloudy', 
