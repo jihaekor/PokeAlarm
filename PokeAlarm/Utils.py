@@ -126,6 +126,20 @@ def get_team_id(team_name):
     return get_team_id.ids.get(name)
 
 
+# Returns the weather
+def get_weather(weather_id):
+    if not hasattr(get_weather, 'info'):
+        get_weather.info = {
+            1: 'Sunny/Clear',
+            2: 'Rain',
+            3: 'Partly Cloudy', 
+            4: 'Cloudy',
+            5: 'Windy',
+            6: 'Snow',
+            7: 'Fog', 
+        }
+    return get_weather.info.get(weather_id, 'Unknown')
+    
 # Returns the damage of a move when requesting
 def get_move_damage(move_id):
     if not hasattr(get_move_damage, 'info'):

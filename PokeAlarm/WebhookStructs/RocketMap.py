@@ -6,7 +6,7 @@ import traceback
 # Local Imports
 from PokeAlarm.Utils import get_gmaps_link, get_move_damage, get_move_dps, \
     get_move_duration, get_move_energy, get_pokemon_gender, get_pokemon_size, \
-    get_applemaps_link
+    get_applemaps_link, get_weather
 
 log = logging.getLogger('WebhookStructs')
 
@@ -52,6 +52,7 @@ class RocketMap:
         # Get some stuff ahead of time (cause we are lazy)
         quick_id = check_for_none(int, data.get('move_1'), '?')
         charge_id = check_for_none(int, data.get('move_2'), '?')
+        weather_id = check_for_none(int, data.get('weather_boosted_condition'), '?')
         lat, lng = data['latitude'], data['longitude']
         # Generate all the non-manager specific DTS
         pkmn = {
@@ -75,6 +76,8 @@ class RocketMap:
             'atk': check_for_none(int, data.get('individual_attack'), '?'),
             'def': check_for_none(int, data.get('individual_defense'), '?'),
             'sta': check_for_none(int, data.get('individual_stamina'), '?'),
+            'weather_id': weather_id, 
+            'weather': get_weather(weather_id), 
             'quick_id': quick_id,
             'quick_damage': get_move_damage(quick_id),
             'quick_dps': get_move_dps(quick_id),
