@@ -231,7 +231,7 @@ class RocketMap:
         egg['ex_raid_flag'] = ''
         if egg['park'] or egg['sponsor'] > 0:
             egg['ex_raid'] = 'Yes'
-            egg['ex_raid_flag'] = ' (Ex-Raid Eligible) '
+            egg['ex_raid_flag'] = ' (Ex-Raid Eligible)'
 
         egg['gmaps'] = get_gmaps_link(egg['lat'], egg['lng'])
         egg['applemaps'] = get_applemaps_link(egg['lat'], egg['lng'])
@@ -296,7 +296,7 @@ class RocketMap:
         raid['ex_raid_flag'] = ''
         if raid['park'] or raid['sponsor'] > 0:
             raid['ex_raid'] = 'Yes'
-            raid['ex_raid_flag'] = ' (Ex-Raid Eligible) '
+            raid['ex_raid_flag'] = ' (Ex-Raid Eligible)'
 
         raid['gmaps'] = get_gmaps_link(raid['lat'], raid['lng'])
         raid['applemaps'] = get_applemaps_link(raid['lat'], raid['lng'])
