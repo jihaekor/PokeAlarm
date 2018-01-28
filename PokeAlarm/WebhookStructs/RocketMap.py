@@ -215,6 +215,9 @@ class RocketMap:
         egg = {
             'type': 'egg',
             'id': id_,
+            'team_id': int(data.get('team_id', data.get('team'))),
+            'park': check_for_none(bool, data.get('park'), False), 
+            'sponsor': check_for_none(int, data.get('sponsor'), 0), 
             'raid_level': check_for_none(int, data.get('level'), 0),
             'raid_end': raid_end,
             'raid_begin': raid_begin,
@@ -223,6 +226,12 @@ class RocketMap:
             'lat_5': "{:.5f}".format(float(data['latitude'])),
             'lng_5': "{:.5f}".format(float(data['longitude']))
         }
+        
+        egg['ex_raid'] = 'No'
+        egg['ex_raid_flag'] = ''
+        if egg['park'] or egg['sponsor'] > 0:
+            egg['ex_raid'] = 'Yes'
+            egg['ex_raid_flag'] = ' (Ex-Raid Eligible) '
 
         egg['gmaps'] = get_gmaps_link(egg['lat'], egg['lng'])
         egg['applemaps'] = get_applemaps_link(egg['lat'], egg['lng'])
@@ -259,6 +268,9 @@ class RocketMap:
         raid = {
             'type': 'raid',
             'id': id_,
+            'team_id': int(data.get('team_id', data.get('team'))),
+            'park': check_for_none(bool, data.get('park'), False), 
+            'sponsor': check_for_none(int, data.get('sponsor'), 0),
             'pkmn_id': check_for_none(int, data.get('pokemon_id'), 0),
             'cp': check_for_none(int, data.get('cp'), '?'),
             'quick_id': quick_id,
@@ -279,6 +291,12 @@ class RocketMap:
             'lat_5': "{:.5f}".format(float(data['latitude'])),
             'lng_5': "{:.5f}".format(float(data['longitude']))
         }
+        
+        raid['ex_raid'] = 'No'
+        raid['ex_raid_flag'] = ''
+        if raid['park'] or raid['sponsor'] > 0:
+            raid['ex_raid'] = 'Yes'
+            raid['ex_raid_flag'] = ' (Ex-Raid Eligible) '
 
         raid['gmaps'] = get_gmaps_link(raid['lat'], raid['lng'])
         raid['applemaps'] = get_applemaps_link(raid['lat'], raid['lng'])

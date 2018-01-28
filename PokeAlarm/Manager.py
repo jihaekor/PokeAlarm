@@ -1003,7 +1003,7 @@ class Manager(object):
         start_time_str = get_time_as_str(egg['raid_begin'], self.__timezone)
 
         # team id saved in self.__gym_hist when processing gym
-        team_id = self.__cache.get_gym_team(gym_id)
+        team_id = egg['team_id']
 
         egg.update({
             "gym_name": gym_info['name'],
@@ -1017,7 +1017,6 @@ class Manager(object):
             'begin_24h_time': start_time_str[2],
             "dist": get_dist_as_str(dist),
             'dir': get_cardinal_dir([lat, lng], self.__location),
-            'team_id': team_id,
             'team_name': self.__locale.get_team_name(team_id),
             'team_leader': self.__locale.get_leader_name(team_id)
         })
@@ -1127,7 +1126,7 @@ class Manager(object):
         start_time_str = get_time_as_str(raid['raid_begin'], self.__timezone)
 
         # team id saved in self.__gym_hist when processing gym
-        team_id = self.__cache.get_gym_team(gym_id)
+        team_id = raid['team_id']
         form_id = raid_pkmn['form_id']
         form = self.__locale.get_form_name(pkmn_id, form_id)
         min_cp, max_cp = get_pokemon_cp_range(pkmn_id, 20)
@@ -1153,7 +1152,6 @@ class Manager(object):
                                 else '{:03}'.format(form_id),
             'form': form,
             'form_or_empty': '' if form == 'unknown' else form,
-            'team_id': team_id,
             'team_name': self.__locale.get_team_name(team_id),
             'team_leader': self.__locale.get_leader_name(team_id),
             'min_cp': min_cp,
